@@ -2,7 +2,7 @@ module ffi
 
 #flag -lffi
 #flag -I@VROOT/
-#flag @VROOT/ffiv.o
+// #flag @VROOT/ffiv.o
 #include "ffiv.h"
 
 pub const (
@@ -57,9 +57,9 @@ struct C._ffi_type {
 }
 pub type Type = C._ffi_type
 fn C.ffi_get_type_obj() &C._ffi_type
-[depcreated]
-fn get_type_obj(ty int) &Type { return C.ffi_get_type_obj(ty) }
-fn get_type_obj2(ty int) &Type {
+//[depcreated]
+//fn get_type_obj(ty int) &Type { return C.ffi_get_type_obj(ty) }
+pub fn get_type_obj2(ty int) &Type {
     mut tyobj := &Type{}
     tyobj = voidptr(0)
     if ty == TYPE_VOID {
