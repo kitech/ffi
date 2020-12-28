@@ -37,6 +37,7 @@ pub const (
     // FFI_TYPE_LAST       FFI_TYPE_COMPLEX
 )
 
+// will gen to: int* __some_prefix_type_void = &
 pub const (
     type_void    = &C.ffi_type_void
     type_uint8   = &C.ffi_type_uint8
@@ -53,14 +54,18 @@ pub const (
 )
 
 struct C._ffi_type {
-
 }
+
 pub type Type = C._ffi_type
 fn C.ffi_get_type_obj() &C._ffi_type
 //[depcreated]
 //fn get_type_obj(ty int) &Type { return C.ffi_get_type_obj(ty) }
+fn ffi_type_nil() &Type { return voidptr(0) }
+pub fn get_type_obj3(ty int) voidptr {
+    return voidptr(get_type_obj2(ty))
+}
 pub fn get_type_obj2(ty int) &Type {
-    mut tyobj := &Type{}
+    mut tyobj := ffi_type_nil()
     tyobj = voidptr(0)
     if ty == TYPE_VOID {
         tyobj = type_void
@@ -198,7 +203,7 @@ pub fn call3(f voidptr, atypes []int, avalues []voidptr) u64 {
     }
 
     // invoke
-    mut avalues2 := avalues
+    mut avalues2 := avalues.clone()
     avaluesc := avalues2.data
     mut rvalue := u64(0)
     C.ffi_call(&cif, f, &rvalue, avaluesc)
